@@ -16,67 +16,74 @@
 
 #! /usr/bin/env python2.7
 
-class Course():
-	def __init__(self, name, number_of_classes):
-		self.name = name
-		self.number_of_classes = number_of_classes
+def create_student(name, surname):
+    student = {'name':name, 'surname':surname, 'courses':{}}
+    return student
 
-	def __str__(self):
-		return self.name
+def create_course(title, attendance):
+    course = {'title':title, 'attendance':attendance}
+    return course
 
-	def get_number_of_classes(self):
-		return number_of_classes
+def add_student_to_course(student, course):
+    students_course = {'attendance':course['attendance']}
+    students_course['actual_attendance'] = 0
+    students_course['grades'] = []
+    student['courses'][course['title']] = students_course
 
-class StudentsCourse():
-	def __init__(self, course):
-		self.course = course
-		self.grades = []
-		self.attendance = 0
+def mark_student(student, course, grade):
+    courses = student['courses']
+    if course['title'] not in courses:
+        print 'Student does not atten given course!'
+        return
+    courses[course['title']]['grades'].append(grade)
 
-	def add_grade(self, grade):
-		self.grades.append(grade)
+def set_attendance(student, course, attendance):
+    if attendance > course['attendance']:
+        print 'Attendance can not be higher than amount of courses!'
+        return
+    student['courses'][course['title']]['actual_attendance'] = attendance
 
-	def get_average(self):
-		return sum(self.grades)/len(self.grades)
+def increase_attendance(student, course):
+    student['courses'][course['title']]['actual_attendance'] += 1
 
-	def set_attendance(self, attendance):
-		self.attendance = attendance
+def get_average_score_in_class(student, course):
+    grades = student['courses'][course['title']]['grades']
+    return float(sum(grades))/len(grades)
 
-	def get_percentage_of_attendance(self):
-		return attendance*100/self.course.get_number_of_classes()
+def get_total_average_score(student):
+    sum_of_grades = 0
+    amount_of_grades = 0
+    for course in student['courses'].values():
+        sum_of_grades += sum(course['grades'])
+        amount_of_grades += len(course['grades'])
+    return float(sum_of_grades)/amount_of_grades
 
-
-class Student():
-	def __init__(self, name, surname):
-		self.name = name
-		self.surname = surname
-		self.courses = []
-
-	def __str__(self):
-		return '%s %s' % (self.surname, self.name)
-
-	def add_students_course(students_course):
-		self.courses.append(students_course)
-
-	def get_total_average(self):
-		totalSum = 0
-		for course in courses:
-			tutalSum += course.get_average()
-		return totalSum/len(courses)
-
-	def get_attendance_at_course(self, course):
-		if course not in self.courses:
-			print 'Student is not attending %s course' % (course)
-		else:
-			x=0
-
+def get_total_attendance(student):
+    max_attendance = 0
+    actual_attendance = 0
+    for course in student['courses'].values():
+        max_attendance += course['attendance']
+        actual_attendance += course['actual_attendance']
+    return float(actual_attendance)/max_attendance
 
 if __name__ == '__main__':
-	course1 = Course('biology', 20)
-	print course1
+    student1 = create_student('John', 'Smith')
+    course1 = create_course('biology', 30)
+    course2 = create_course('physics', 28)
 
+    add_student_to_course(student1, course1)
+    add_student_to_course(student1, course2)
 
-	student1 = Student('John', 'Smith')
-	print student1
+    mark_student(student1, course1, 3)
+    mark_student(student1, course1, 4)
+    mark_student(student1, course2, 3)
 
+    set_attendance(student1, course1, 25)
+    increase_attendance(student1, course2)
+
+    print student1
+    print course1
+    print get_average_score_in_class(student1, course1)
+    print get_total_average_score(student1)
+    print get_total_attendance(student1)
 
