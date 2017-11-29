@@ -48,7 +48,7 @@ def increase_attendance(student, course):
 
 def get_average_score_in_class(student, course):
     grades = student['courses'][course['title']]['grades']
-    return float(sum(grades))/len(grades)
+    return float(sum(grades)) / len(grades)
 
 def get_total_average_score(student):
     sum_of_grades = 0
@@ -56,7 +56,7 @@ def get_total_average_score(student):
     for course in student['courses'].values():
         sum_of_grades += sum(course['grades'])
         amount_of_grades += len(course['grades'])
-    return float(sum_of_grades)/amount_of_grades
+    return float(sum_of_grades) / amount_of_grades
 
 def get_total_attendance(student):
     max_attendance = 0
@@ -64,7 +64,7 @@ def get_total_attendance(student):
     for course in student['courses'].values():
         max_attendance += course['attendance']
         actual_attendance += course['actual_attendance']
-    return float(actual_attendance)/max_attendance
+    return float(actual_attendance) / max_attendance
 
 if __name__ == '__main__':
     student1 = create_student('John', 'Smith')
